@@ -48,7 +48,7 @@ st.sidebar.markdown(ND, unsafe_allow_html=True)
 st.sidebar.markdown(SD, unsafe_allow_html=True)
 st.sidebar.markdown(OZ, unsafe_allow_html=True)
 
-image = Image.open('lung.png')
+image = Image.open('Lung.png')
 
 st.sidebar.image(image)
 
