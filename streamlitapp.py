@@ -52,7 +52,7 @@ image = Image.open('Lung.png')
 
 st.sidebar.image(image)
 
-st.write('Python Libaries such as pandas,  numpy,  pyplot were used to analyze and depict the Emergency Asthma Hospitalizations of children aged 0 to 17 from 2009 to 2015 in NYC, as well as the amount of pollutants in the air during the same time period.')
+st.write('Python Libaries such as pandas,  numpy,  pyplot were used to analyze and depict the emergency Asthma department visits of children aged 0 to 17 from 2009 to 2015 in NYC, as well as the amount of pollutants in the air during the same time period.')
 
 
 if Borough == "New York City":
@@ -87,7 +87,7 @@ else:
 
 
 
-dataused = '<p style="font-family:Palatino, URW Palladio L, serif; color:#465fab; font-size: 19px;">Data and Resources Used</p>'
+dataused = '<p style="font-family:Palatino, URW Palladio L, serif; color:#465fab; font-size: 19px;">Data and Resource:</p>'
 st.markdown(dataused, unsafe_allow_html=True)
 st.write('[Air Quality Data from NYC Open Data](https://data.cityofnewyork.us/Environment/Air-Quality/c3uy-2p5r)')
 st.write('[Asthma Emergency Department Visits from Citizen’s commute for children of New York](https://data.cccnewyork.org/data/table/6/asthma-emergency-department-visits#6/9/22/a/a)')
