@@ -6,6 +6,7 @@ import pandas as pd
 import altair as alt
 from PIL import Image
 
+
 st.set_page_config(
      page_title="Air Pollution in NYC",
      page_icon="chart_with_upwards_trend",
@@ -28,9 +29,12 @@ poll= '<p style="font-family:Palatino, URW Palladio L, serif; color:#465fab; fon
 st.title('Air pollution in NYC 🗽')
 st.sidebar.markdown(sidebarTitle, unsafe_allow_html=True)
 st.markdown(title, unsafe_allow_html=True)
-
 pollimg = Image.open('pollution.png')
+
 st.image(pollimg, width = 400)
+
+
+
 
 
 Borough = st.sidebar.selectbox(
@@ -54,6 +58,7 @@ st.write('Python Libaries such as pandas,  numpy,  pyplot were used to analyze a
 if Borough == "New York City":
     df = Airpoll.asth
     st.code('import pandas as pd\nasthmadata = pd.read_csv(\'Asthma_Emergency_Department_Visits.csv\')')
+    st.write(Borough + ' Data')
     st.dataframe(df.head(10))
     st.write('\nDisplaying map of Asthma Emergency Department Visits in NYC areas from year 2009-2015')
     fig = Airpoll.asthmamap(df)
@@ -64,8 +69,9 @@ if Borough == "New York City":
 else:
     df = Airpoll.Boroughdata(Borough)
     st.code('import pandas as pd\nairdata = pd.read_csv(\'Air_Quality.csv\')')
-
+    st.write(Borough + ' sData')
     st.dataframe(df.head(10))
+    st.write('Map of Pollution values in ' + Borough + ' according to area: ')
     y = Airpoll.Bmap(df)
     st.write(y)
 
