@@ -87,7 +87,7 @@ else:
 
 
 
-dataused = '<p style="font-family:Palatino, URW Palladio L, serif; color:#465fab; font-size: 19px;">Data and Resource:</p>'
+dataused = '<p style="font-family:Palatino, URW Palladio L, serif; color:#465fab; font-size: 19px;">Data and Resources:</p>'
 st.markdown(dataused, unsafe_allow_html=True)
 st.write('[Air Quality Data from NYC Open Data](https://data.cityofnewyork.us/Environment/Air-Quality/c3uy-2p5r)')
 st.write('[Asthma Emergency Department Visits from Citizen’s commute for children of New York](https://data.cccnewyork.org/data/table/6/asthma-emergency-department-visits#6/9/22/a/a)')
