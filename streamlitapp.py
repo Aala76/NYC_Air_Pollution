@@ -59,7 +59,7 @@ if Borough == "New York City":
     df = Airpoll.asth
     st.code('import pandas as pd\nasthmadata = pd.read_csv(\'Asthma_Emergency_Department_Visits.csv\')')
     st.write(Borough + ' Data')
-    st.dataframe(df.head(10))
+    st.dataframe(df.head(50))
     st.write('\nDisplaying map of Asthma Emergency Department Visits in NYC areas from year 2009-2015')
     fig = Airpoll.asthmamap(df)
 
@@ -70,7 +70,7 @@ else:
     df = Airpoll.Boroughdata(Borough)
     st.code('import pandas as pd\nairdata = pd.read_csv(\'Air_Quality.csv\')')
     st.write(Borough + ' Data')
-    st.dataframe(df.head(10))
+    st.dataframe(df.head(50))
     st.write('Map of Pollution values in ' + Borough + ' according to area: ')
     y = Airpoll.Bmap(df)
     st.write(y)
