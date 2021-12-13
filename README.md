@@ -1,3 +1,3 @@
 See the App Live [Here](https://share.streamlit.io/aala76/nyc_air_pollution/main/streamlitapp.py)
 
-![Air pollution in NYC](https://user-images.githubusercontent.com/62723840/145864477-5bd4928d-8968-4877-8e24-906a7c57e78c.jpg)
+<img width="734" alt="Screen Shot 2021-12-13 at 1 03 08 PM" src="https://user-images.githubusercontent.com/62723840/145864631-8a7a920d-b273-4a96-9adc-1ba8e39d5791.png">
