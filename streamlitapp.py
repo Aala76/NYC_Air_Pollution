@@ -1,71 +1,9 @@
-import pandas as pd
-import numpy as np
-import json
-import plotly.express as px
-import plotly.io as pio
 import streamlit as st
+import Airpoll
+import plotly.express as px
 import plotly.graph_objects as go
-
-
-airdata = pd.read_csv('Air_Quality.csv')
-asthdata = pd.read_csv('Asthma_Emergency_Department_Visits.csv')
-
-
-airdata = airdata.drop('Message', 1)
-airdata = airdata[(airdata['Name'] == 'Fine Particulate Matter (PM2.5)') |
-   (airdata['Name'] == 'Nitrogen Dioxide (NO2)') |
-   (airdata['Name'] == 'Ozone (O3)')]
-
-airdata['Start_Date'] = airdata['Start_Date'].apply(pd.to_datetime)
-airdata['Start_Date'] = airdata['Start_Date'].dt.year
-
-airdata.drop(['Time Period', 'Indicator ID', 'Unique ID'], axis=1)
-airdata= airdata[(airdata['Start_Date'] <=2015) & (airdata['Start_Date'] >=2009)]
-airdata = airdata.rename({'Start_Date': 'TimeFrame', 'Geo Place Name': 'Location', 'Name': 'Pollutant'}, axis=1)
-airdata = airdata.drop(columns=['Unique ID', 'Indicator ID', 'Measure', 'Time Period'])
-airdata = airdata[airdata['Geo Type Name'] == 'CD']
-
-
-
-#ASTHMA DATA
-asth = pd.read_csv('Asthma_Emergency_Department_Visits.csv')
-asth = asth[asth['Age Group'] == '0 to 17 Years']
-asth = asth.rename({'Fips': 'Geo Join ID'}, axis=1)
-asth = asth[(asth['Location'] != 'Brooklyn')]
-asth = asth[(asth['Location'] != 'Bronx')]
-asth = asth[(asth['Location'] != 'Queens')]
-asth = asth[(asth['Location'] != 'Staten Island')]
-asth = asth[(asth['Location'] != 'New York City')]
-asth = asth[(asth['Location'] != 'Manhattan')]
-asth['Geo Join ID'] = asth['Geo Join ID'].map(lambda x: x.lstrip('uhf'))
-asth['Geo Join ID']=asth['Geo Join ID'].astype(int)
-
-
-def Boroughdata(Borough):
-    #merg = airdata.merge(asth, on=['Geo Join ID', 'TimeFrame'],how='left')
-#     merg = merg.rename(columns={'Data Value': 'Mean Pollution Value', 'Data': 'Asthma Emergency Dep. Visits', 'Location_x': 'Location'})
-#     merg= merg.dropna()
-    nycb = json.load(open('neigh.json', 'r'))
-    Boro_map = {}
-    for feature in nycb['features']:
-        feature['Borough'] = feature['properties']['BOROUGH']
-        Boro_map[feature['properties']['GEOCODE']] = feature['Borough']
-    airdata['Borough'] = airdata['Geo Join ID'].map(Boro_map)
-    x = airdata[airdata['Borough'] == Borough]
-    return x
-
-def Bmap(data):
-    nycb = json.load(open('neigh.json', 'r'))
-    fig = px.choropleth_mapbox(data, locations='Geo Join ID', geojson=nycb, color='Data Value', hover_name='Location', mapbox_style='carto-positron', center = {'lat':40.681395467965096, 'lon':-73.93646399798689}, zoom=9, opacity = 0.5)
-    return fig
-
-
-def Piech(year, data):
-    df = data.query("TimeFrame == {}".format(year))
-    fig = px.pie(df, values='Data Value', names='Pollutant', title='Borough Pollutants in ' + year)
-    return fig
-
-
+import pandas as pd
+import altair as alt
 
 st.set_page_config(
      page_title="Air Pollution in NYC",
@@ -79,34 +17,65 @@ st.set_page_config(
      }
  )
 
-title = '<p style="font-family:Palatino, URW Palladio L, serif; color:#0E715F; font-size: 22px;">Air pollution in NYC  </p>'
-sidebarTitle = '<p style="font-family:Palatino, URW Palladio L, serif; color:#5184AA; font-size: 22px;">Data</p>'
-
+title = '<p style="font-family:Palatino, URW Palladio L, serif; color:#5184AA; font-size: 22px;">Air pollution in NYC  </p>'
+sidebarTitle = '<p style="font-family:Palatino, URW Palladio L, serif; color:#465fab; font-size: 22px;">Data</p>'
+FPM = '<p style="font-family:Palatino, URW Palladio L, serif; color:#5184AA; font-size: 15px;">Fine Particulate Matter (PM2.5) :  Fine particles are released by automobiles, building boilers, and other forms of combustion, and are a major source of air pollution that impacts human health.</p>'
+ND = '<p style="font-family:Palatino, URW Palladio L, serif; color:#5184AA; font-size: 15px;">Nitrogen Dioxide (NO2): is a type of pollutant produced by combustion that can harm lung tissue, induce breathing and respiratory issues, and contribute to smog and acid rain.</p>'
+SD= '<p style="font-family:Palatino, URW Palladio L, serif; color:#5184AA; font-size: 15px;">Sulfur Dioxide (SO2):  Sulfur dioxide comes from burning certain types of fuel oil. As an air pollutant, it can can worsen lung diseases. </p>'
+OZ= '<p style="font-family:Palatino, URW Palladio L, serif; color:#5184AA; font-size: 15px;">Ozone (O3):  Ozone is a common air pollutant that can harm breathing and worsen asthma and other respiratory conditions.</p>'
+poll= '<p style="font-family:Palatino, URW Palladio L, serif; color:#465fab; font-size: 20;">Pollutants</p>'
 st.title('Air pollution in NYC 🗽')
 st.sidebar.markdown(sidebarTitle, unsafe_allow_html=True)
 st.markdown(title, unsafe_allow_html=True)
 
 
 
+
 Borough = st.sidebar.selectbox(
-    "Pollution by Borough",
-    ("Brooklyn", "Bronx", "Manhattan", 'Staten Island', 'Queens')
+    "Data by Location",
+    ("New York City","Brooklyn", "Bronx", "Manhattan", 'Staten Island', 'Queens')
 )
 
-df = Boroughdata(Borough)
+st.sidebar.markdown(poll, unsafe_allow_html=True)
+st.sidebar.markdown(FPM, unsafe_allow_html=True)
+st.sidebar.markdown(ND, unsafe_allow_html=True)
+st.sidebar.markdown(SD, unsafe_allow_html=True)
+st.sidebar.markdown(OZ, unsafe_allow_html=True)
 
-st.dataframe(df)
+st.write('Python Libaries such as pandas,  numpy,  pyplot were used to analyze and depict the Emergency Asthma Hospitalizations of children aged 0 to 17 from 2009 to 2015 in NYC, as well as the amount of pollutants in the air during the same time period.')
 
-y = Bmap(df)
-st.write(y)
 
-Y = '<p style="font-family:Palatino, URW Palladio L, serif; color:#0E715F; font-size: 22px;">Select Year</p>'
-st.markdown(Y, unsafe_allow_html=True)
+if Borough == "New York City":
+    df = Airpoll.asth
+    st.code('import pandas as pd\nasthmadata = pd.read_csv(\'Asthma_Emergency_Department_Visits.csv\')')
+    st.dataframe(df.head(10))
+    st.write('\nDisplaying map of Asthma Emergency Department Visits in NYC areas from year 2009-2015')
+    fig = Airpoll.asthmamap(df)
 
-Year = st.selectbox(
-    "Year",
-    ("2009", "2010", "2011", '2012', '2013', '2014', '2015')
-    )
+    st.write(fig)
+    pie = Airpoll.nycpie()
+    st.write(pie)
+else:
+    df = Airpoll.Boroughdata(Borough)
+    st.code('import pandas as pd\nairdata = pd.read_csv(\'Air_Quality.csv\')')
 
-fig = Piech(Year, df)
-st.write(fig)
+    st.dataframe(df.head(10))
+    y = Airpoll.Bmap(df)
+    st.write(y)
+
+    Y = '<p style="font-family:Palatino, URW Palladio L, serif; color:#0E715F; font-size: 22px;">Select Year</p>'
+    st.markdown(Y, unsafe_allow_html=True)
+
+    Year = st.slider("Year",min_value= 2009, max_value = 2015, step = 1)
+
+
+    fig = Airpoll.Piech(str(Year), df, Borough)
+    st.write(fig)
+
+
+
+
+dataused = '<p style="font-family:Palatino, URW Palladio L, serif; color:#465fab; font-size: 19px;">Data and Resources Used</p>'
+st.markdown(dataused, unsafe_allow_html=True)
+st.write('[Air Quality Data from NYC Open Data](https://data.cityofnewyork.us/Environment/Air-Quality/c3uy-2p5r)')
+st.write('[Asthma Emergency Department Visits from Citizen’s commute for children of New York](https://data.cccnewyork.org/data/table/6/asthma-emergency-department-visits#6/9/22/a/a)')
