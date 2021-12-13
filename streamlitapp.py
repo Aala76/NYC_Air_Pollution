@@ -4,6 +4,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 import pandas as pd
 import altair as alt
+from PIL import Image
 
 st.set_page_config(
      page_title="Air Pollution in NYC",
@@ -28,7 +29,8 @@ st.title('Air pollution in NYC 🗽')
 st.sidebar.markdown(sidebarTitle, unsafe_allow_html=True)
 st.markdown(title, unsafe_allow_html=True)
 
-
+pollimg = Image.open('pollution.png')
+st.image(pollimg)
 
 
 Borough = st.sidebar.selectbox(
@@ -41,6 +43,10 @@ st.sidebar.markdown(FPM, unsafe_allow_html=True)
 st.sidebar.markdown(ND, unsafe_allow_html=True)
 st.sidebar.markdown(SD, unsafe_allow_html=True)
 st.sidebar.markdown(OZ, unsafe_allow_html=True)
+
+image = Image.open('lung.png')
+
+st.sidebar.image(image)
 
 st.write('Python Libaries such as pandas,  numpy,  pyplot were used to analyze and depict the Emergency Asthma Hospitalizations of children aged 0 to 17 from 2009 to 2015 in NYC, as well as the amount of pollutants in the air during the same time period.')
 
