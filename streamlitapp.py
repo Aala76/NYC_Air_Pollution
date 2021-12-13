@@ -69,7 +69,7 @@ if Borough == "New York City":
 else:
     df = Airpoll.Boroughdata(Borough)
     st.code('import pandas as pd\nairdata = pd.read_csv(\'Air_Quality.csv\')')
-    st.write(Borough + ' sData')
+    st.write(Borough + ' Data')
     st.dataframe(df.head(10))
     st.write('Map of Pollution values in ' + Borough + ' according to area: ')
     y = Airpoll.Bmap(df)
