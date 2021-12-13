@@ -30,7 +30,7 @@ st.sidebar.markdown(sidebarTitle, unsafe_allow_html=True)
 st.markdown(title, unsafe_allow_html=True)
 
 pollimg = Image.open('pollution.png')
-st.image(pollimg)
+st.image(pollimg, width = 400)
 
 
 Borough = st.sidebar.selectbox(
