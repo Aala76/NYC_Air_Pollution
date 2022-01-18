@@ -50,7 +50,7 @@ st.sidebar.markdown(OZ, unsafe_allow_html=True)
 image = Image.open('images/Lung.png')
 st.sidebar.image(image)
 
-st.write('The emergency Asthma department visits of children aged 0 to 17 from 2009 to 2015 in NYC, as well as the amount of pollutants in the air over the same time period, were analyzed and depicted using Python packages such as pandas and plotly.\nChoropleth maps and pie charts were  created to visually represent the data sets.')
+st.write('The emergency asthma department visits of children aged 0 to 17 from 2009 to 2015 in NYC, as well as the amount of pollutants in the air over the same time period, were analyzed and depicted using Python packages such as pandas and plotly.\nChoropleth maps and pie charts were  created to visually represent the data sets.')
 
 
 if Borough == "New York City":
