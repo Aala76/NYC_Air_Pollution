@@ -7,6 +7,8 @@ import altair as alt
 from PIL import Image
 
 
+#setting up page configurations
+
 st.set_page_config(
      page_title="Air Pollution in NYC",
      page_icon="chart_with_upwards_trend",
@@ -29,13 +31,9 @@ poll= '<p style="font-family:Palatino, URW Palladio L, serif; color:#465fab; fon
 st.title('Air pollution in NYC 🗽')
 st.sidebar.markdown(sidebarTitle, unsafe_allow_html=True)
 st.markdown(title, unsafe_allow_html=True)
-pollimg = Image.open('pollution.png')
+pollimg = Image.open('images/pollution.png')
 
 st.image(pollimg, width = 400)
-
-
-
-
 
 Borough = st.sidebar.selectbox(
     "Data by Location",
@@ -48,19 +46,21 @@ st.sidebar.markdown(ND, unsafe_allow_html=True)
 st.sidebar.markdown(SD, unsafe_allow_html=True)
 st.sidebar.markdown(OZ, unsafe_allow_html=True)
 
-image = Image.open('Lung.png')
-
+#Loading Image
+image = Image.open('images/Lung.png')
 st.sidebar.image(image)
 
-st.write('Python Libaries such as pandas,  numpy,  pyplot were used to analyze and depict the emergency Asthma department visits of children aged 0 to 17 from 2009 to 2015 in NYC, as well as the amount of pollutants in the air during the same time period.')
+st.write('The emergency Asthma department visits of children aged 0 to 17 from 2009 to 2015 in NYC, as well as the amount of pollutants in the air over the same time period, were analyzed and depicted using Python packages such as pandas and plotly.\nChoropleth maps and pie charts were  created to visually represent the data sets.')
 
 
 if Borough == "New York City":
     df = Airpoll.asth
     st.code('import pandas as pd\nasthmadata = pd.read_csv(\'Asthma_Emergency_Department_Visits.csv\')')
     st.write(Borough + ' Data')
+
+    #displaying dataframe on page
     st.dataframe(df.head(50))
-    st.write('\nDisplaying map of Asthma Emergency Department Visits in NYC areas from year 2009-2015')
+    st.write('\nDisplaying choropleth map of asthma emergency department visits in NYC areas from year 2009-2015')
     fig = Airpoll.asthmamap(df)
 
     st.write(fig)
@@ -71,23 +71,20 @@ else:
     st.code('import pandas as pd\nairdata = pd.read_csv(\'Air_Quality.csv\')')
     st.write(Borough + ' Data')
     st.dataframe(df.head(50))
-    st.write('Map of Pollution values in ' + Borough + ' according to area: ')
-    y = Airpoll.Bmap(df)
-    st.write(y)
 
-    Y = '<p style="font-family:Palatino, URW Palladio L, serif; color:#0E715F; font-size: 22px;">Select Year</p>'
-    st.markdown(Y, unsafe_allow_html=True)
+    st.write('Map of Pollution values in ' + Borough + ' according to area: ')
+    borough_map = Airpoll.Bmap(df)
+    st.write(borough_map)
+
+    select_year = '<p style="font-family:Palatino, URW Palladio L, serif; color:#0E715F; font-size: 22px;">Select Year</p>'
+    st.markdown(select_year, unsafe_allow_html=True)
 
     Year = st.slider("Year",min_value= 2009, max_value = 2015, step = 1)
-
-
     fig = Airpoll.Piech(str(Year), df, Borough)
     st.write(fig)
 
 
-
-
-dataused = '<p style="font-family:Palatino, URW Palladio L, serif; color:#465fab; font-size: 19px;">Data and Resources:</p>'
+dataused = '<p style="font-family:Palatino, URW Palladio L, serif; color:#465fab; font-size: 14px;">Data and Resources:</p>'
 st.markdown(dataused, unsafe_allow_html=True)
 st.write('[Air Quality Data from NYC Open Data](https://data.cityofnewyork.us/Environment/Air-Quality/c3uy-2p5r)')
-st.write('[Asthma Emergency Department Visits from Citizen’s commute for children of New York](https://data.cccnewyork.org/data/table/6/asthma-emergency-department-visits#6/9/22/a/a)')
+st.write('[Asthma Emergency Department Visits from Citizen’s Committee for children of New York](https://data.cccnewyork.org/data/table/6/asthma-emergency-department-visits#6/9/22/a/a)')
